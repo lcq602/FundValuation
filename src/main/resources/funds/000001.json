@@ -1,0 +1,41 @@
+{
+  "fund_code": "000001",
+  "fund_name": "Fund Valuation Sample B",
+  "holdings": [
+    {
+      "stock_code": "TSM",
+      "stock_name": "TSMC",
+      "ratio": 0.102
+    },
+    {
+      "stock_code": "AAPL",
+      "stock_name": "Apple",
+      "ratio": 0.095
+    },
+    {
+      "stock_code": "MSFT",
+      "stock_name": "Microsoft",
+      "ratio": 0.089
+    },
+    {
+      "stock_code": "GOOGL",
+      "stock_name": "Alphabet A",
+      "ratio": 0.078
+    },
+    {
+      "stock_code": "NVDA",
+      "stock_name": "NVIDIA",
+      "ratio": 0.072
+    },
+    {
+      "stock_code": "AMZN",
+      "stock_name": "Amazon",
+      "ratio": 0.064
+    },
+    {
+      "stock_code": "META",
+      "stock_name": "Meta Platforms",
+      "ratio": 0.05
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Grant execute permission for mvnw
+        run: chmod +x mvnw
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+      - name: Run tests
+        run: ./mvnw test
+
+      - name: Package JAR
+        run: ./mvnw -DskipTests package
+
+      - name: Copy JAR to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          source: target/FundValuation-0.0.1-SNAPSHOT.jar
+          target: ${{ secrets.APP_DIR }}
+          strip_components: 1
+
+      - name: Restart service
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+            APP_DIR="${{ secrets.APP_DIR }}"
+            JAR_FILE="$APP_DIR/FundValuation-0.0.1-SNAPSHOT.jar"
+            PID_FILE="$APP_DIR/fundval.pid"
+            LOG_FILE="$APP_DIR/app.log"
+
+            if [ -f "$PID_FILE" ]; then
+              OLD_PID="$(cat "$PID_FILE")"
+              if [ -n "$OLD_PID" ] && kill -0 "$OLD_PID" 2>/dev/null; then
+                kill "$OLD_PID" || true
+                sleep 3
+              fi
+            fi
+
+            nohup java -jar "$JAR_FILE" \
+              --spring.profiles.active=prod \
+              --server.port=5000 \
+              > "$LOG_FILE" 2>&1 &
+            echo $! > "$PID_FILE"
+
+            sleep 8
+            curl -fsS http://127.0.0.1:5000/api/funds > /dev/null

@@ -1,0 +1,13 @@
+{
+  "appId": "org.dsb.guzhi",
+  "appName": "基金估值",
+  "webDir": "dist",
+  "server": {
+    "hostname": "localhost",
+    "androidScheme": "http",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

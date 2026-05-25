@@ -1,0 +1,56 @@
+{
+  "fund_code": "012920",
+  "fund_name": "易方达全球成长精选混合(QDII)人民币A",
+  "holdings": [
+    {
+      "stock_code": "TSM",
+      "stock_name": "台积电",
+      "ratio": 0.0888
+    },
+    {
+      "stock_code": "LUMN",
+      "stock_name": "Lumen Technologies Inc",
+      "ratio": 0.0868
+    },
+    {
+      "stock_code": "300502",
+      "stock_name": "新易盛",
+      "ratio": 0.0602
+    },
+    {
+      "stock_code": "GLW",
+      "stock_name": "康宁",
+      "ratio": 0.0467
+    },
+    {
+      "stock_code": "AXTI",
+      "stock_name": "AXT Inc",
+      "ratio": 0.0467
+    },
+    {
+      "stock_code": "300308",
+      "stock_name": "中际旭创",
+      "ratio": 0.0467
+    },
+    {
+      "stock_code": "688498",
+      "stock_name": "源杰科技",
+      "ratio": 0.0449
+    },
+    {
+      "stock_code": "TSEM",
+      "stock_name": "Tower半导体",
+      "ratio": 0.0372
+    },
+    {
+      "stock_code": "GOOGL",
+      "stock_name": "谷歌-A",
+      "ratio": 0.0336
+    },
+    {
+      "stock_code": "002384",
+      "stock_name": "东山精密",
+      "ratio": 0.0267
+    }
+  ]
+}

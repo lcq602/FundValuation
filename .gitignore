@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Admin frontend
+node_modules/
+frontend/dist/
+
+# Runtime data (writable fund files)
+data/
