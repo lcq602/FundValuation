@@ -2,7 +2,7 @@
   <div>
     <div class="card">
       <div class="toolbar">
-        <strong>查询基金持仓</strong>
+        <strong>查询线上基金持仓</strong>
       </div>
       <div class="form-group">
         <label>基金代码</label>
@@ -11,25 +11,26 @@
           <button class="btn-primary" @click="search" :disabled="loading">
             {{ loading ? '查询中...' : '查询' }}
           </button>
+          <button v-if="result" class="btn-outline" @click="saveAsFund">保存为基金</button>
         </div>
       </div>
     </div>
 
-    <div v-if="error" class="error">{{ error }}</div>
+    <div v-if="error" class="msg-bar error">{{ error }}</div>
 
     <template v-if="result">
       <div class="card">
         <div class="toolbar">
           <strong>{{ result.fund_code }} - {{ result.fund_name }}</strong>
-          <span style="font-size: 12px; color: #999;">持仓 {{ holdings.length }} 只</span>
+          <span class="toolbar-count">持仓 {{ holdings.length }} 只</span>
           <span style="flex: 1;"></span>
-          <button class="btn-outline btn-sm" @click="copyJson">复制 JSON</button>
-          <button class="btn-success btn-sm" @click="copyMarkdown">复制 Markdown</button>
+          <button class="btn-ghost btn-sm" @click="copyJson">复制 JSON</button>
+          <button class="btn-outline btn-sm" @click="copyMarkdown">复制 Markdown</button>
         </div>
         <table>
           <thead>
             <tr>
-              <th>#</th>
+              <th style="width: 32px;">#</th>
               <th>股票代码</th>
               <th>股票名称</th>
               <th>持仓比例</th>
@@ -49,7 +50,7 @@
 
       <div class="card copy-wrapper">
         <strong style="font-size: 13px;">JSON 预览</strong>
-        <button class="btn-outline btn-sm copy-btn" @click="copyJson">复制</button>
+        <button class="btn-ghost btn-sm copy-btn" @click="copyJson">复制</button>
         <textarea class="json-editor" readonly>{{ jsonText }}</textarea>
       </div>
     </template>
@@ -83,10 +84,10 @@ export default {
       this.error = ''
       this.result = null
       try {
-        const res = await fetch(`/api/admin/funds/${code}`)
+        const res = await fetch(`/api/admin/funds/online/${code}`)
         if (!res.ok) {
-          if (res.status === 404) throw new Error('未找到该基金')
-          throw new Error(`HTTP ${res.status}`)
+          const data = await res.json().catch(() => ({}))
+          throw new Error(data.error || `HTTP ${res.status}`)
         }
         this.result = await res.json()
       } catch (e) {
@@ -95,10 +96,27 @@ export default {
         this.loading = false
       }
     },
+    async saveAsFund() {
+      if (!this.result) return
+      try {
+        const res = await fetch('/api/admin/funds', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.result),
+        })
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}))
+          throw new Error(data.error || `HTTP ${res.status}`)
+        }
+        this.flashMsg('基金已保存!', 'success')
+      } catch (e) {
+        this.flashMsg('保存失败: ' + e.message, 'error')
+      }
+    },
     async copyJson() {
       try {
         await navigator.clipboard.writeText(this.jsonText)
-        this.flashMsg('JSON 已复制')
+        this.flashMsg('JSON 已复制', 'success')
       } catch {
         this.fallbackCopy(this.jsonText)
       }
@@ -112,7 +130,7 @@ export default {
       })
       try {
         await navigator.clipboard.writeText(md)
-        this.flashMsg('Markdown 已复制')
+        this.flashMsg('Markdown 已复制', 'success')
       } catch {
         this.fallbackCopy(md)
       }
@@ -126,12 +144,12 @@ export default {
       ta.select()
       document.execCommand('copy')
       document.body.removeChild(ta)
-      this.flashMsg('已复制')
+      this.flashMsg('已复制', 'success')
     },
-    flashMsg(msg) {
+    flashMsg(msg, type) {
       const div = document.createElement('div')
       div.textContent = msg
-      div.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#52c41a;color:#fff;padding:8px 20px;border-radius:4px;z-index:9999;font-size:13px;'
+      div.className = `toast toast-${type}`
       document.body.appendChild(div)
       setTimeout(() => div.remove(), 1500)
     },

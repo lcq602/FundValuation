@@ -7,7 +7,10 @@
         style="width: 200px;"
       />
       <button class="btn-primary" @click="showCreate = true">+ 新建基金</button>
-      <span style="margin-left: auto; font-size: 12px; color: #999;">共 {{ filteredList.length }} 只基金</span>
+      <button class="btn-outline" :disabled="syncing" @click="syncData">
+        {{ syncing ? '同步中...' : '同步数据' }}
+      </button>
+      <span class="toolbar-count">共 {{ filteredList.length }} 只基金</span>
     </div>
 
     <div class="card">
@@ -23,12 +26,15 @@
           <span class="name">{{ item.name }}</span>
         </div>
         <div class="actions">
-          <button class="btn-outline btn-sm" @click.stop="select(item)">编辑</button>
-          <button class="btn-danger btn-sm" @click.stop="confirmDelete(item)">删除</button>
+          <button class="btn-ghost btn-sm" @click.stop="select(item)">编辑</button>
+          <button class="btn-xs" style="background:var(--danger-light);color:var(--danger);" @click.stop="confirmDelete(item)">删除</button>
         </div>
       </div>
       <div v-if="filteredList.length === 0" class="empty">暂无基金数据</div>
     </div>
+
+    <div v-if="error" class="msg-bar error">{{ error }}</div>
+    <div v-if="success" class="msg-bar success">{{ success }}</div>
 
     <!-- 新建弹窗 -->
     <div v-if="showCreate" class="modal-overlay" @click.self="showCreate = false">
@@ -60,8 +66,6 @@
         </div>
       </div>
     </div>
-
-    <div v-if="error" class="error">{{ error }}</div>
   </div>
 </template>
 
@@ -76,6 +80,8 @@ export default {
       showCreate: false,
       deleteTarget: null,
       newFund: { code: '', name: '' },
+      syncing: false,
+      success: '',
       error: '',
     }
   },
@@ -99,6 +105,27 @@ export default {
         this.fundList = await res.json()
       } catch (e) {
         this.error = '加载基金列表失败: ' + e.message
+      }
+    },
+    async syncData() {
+      this.syncing = true
+      this.success = ''
+      this.error = ''
+      try {
+        const res = await fetch('/api/admin/funds/sync', {
+          method: 'POST',
+        })
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const data = await res.json()
+        this.success = data.message || '同步成功'
+        await this.fetchList()
+        setTimeout(() => {
+          this.success = ''
+        }, 2000)
+      } catch (e) {
+        this.error = '同步失败: ' + e.message
+      } finally {
+        this.syncing = false
       }
     },
     select(item) {

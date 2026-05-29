@@ -1,0 +1,32 @@
+{
+  "fund_code": "005698",
+  "fund_name": "华夏全球科技先锋混合(QDII)",
+  "tags": ["overseas", "qdii"],
+  "holdings": [
+    {
+      "stock_code": "NVDA",
+      "stock_name": "NVIDIA",
+      "ratio": 0.12
+    },
+    {
+      "stock_code": "AAPL",
+      "stock_name": "Apple",
+      "ratio": 0.08
+    },
+    {
+      "stock_code": "AVGO",
+      "stock_name": "Broadcom",
+      "ratio": 0.06
+    },
+    {
+      "stock_code": "TSM",
+      "stock_name": "TSMC",
+      "ratio": 0.05
+    },
+    {
+      "stock_code": "ASML",
+      "stock_name": "ASML",
+      "ratio": 0.04
+    }
+  ]
+}

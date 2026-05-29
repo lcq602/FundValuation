@@ -1,0 +1,32 @@
+{
+  "fund_code": "006373",
+  "fund_name": "国富全球科技互联混合(QDII)",
+  "tags": ["overseas", "qdii"],
+  "holdings": [
+    {
+      "stock_code": "MSFT",
+      "stock_name": "Microsoft",
+      "ratio": 0.10
+    },
+    {
+      "stock_code": "GOOGL",
+      "stock_name": "Alphabet",
+      "ratio": 0.08
+    },
+    {
+      "stock_code": "AMZN",
+      "stock_name": "Amazon",
+      "ratio": 0.07
+    },
+    {
+      "stock_code": "TSM",
+      "stock_name": "TSMC",
+      "ratio": 0.06
+    },
+    {
+      "stock_code": "META",
+      "stock_name": "Meta",
+      "ratio": 0.05
+    }
+  ]
+}

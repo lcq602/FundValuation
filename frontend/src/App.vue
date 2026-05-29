@@ -1,7 +1,7 @@
 <template>
   <div>
     <header class="header">
-      <h1>基金管理后台</h1>
+      <h1>FundValuation</h1>
       <nav>
         <a href="#" :class="{ active: tab === 'funds' }" @click.prevent="tab = 'funds'">基金列表</a>
         <a href="#" :class="{ active: tab === 'editor' }" @click.prevent="tab = 'editor'">编辑器</a>

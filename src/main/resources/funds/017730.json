@@ -1,0 +1,32 @@
+{
+  "fund_code": "017730",
+  "fund_name": "嘉实全球产业升级股票发起式(QDII)",
+  "tags": ["overseas", "qdii"],
+  "holdings": [
+    {
+      "stock_code": "TSLA",
+      "stock_name": "Tesla",
+      "ratio": 0.10
+    },
+    {
+      "stock_code": "BABA",
+      "stock_name": "Alibaba",
+      "ratio": 0.08
+    },
+    {
+      "stock_code": "PDD",
+      "stock_name": "PDD Holdings",
+      "ratio": 0.06
+    },
+    {
+      "stock_code": "JD",
+      "stock_name": "JD.com",
+      "ratio": 0.05
+    },
+    {
+      "stock_code": "BIDU",
+      "stock_name": "Baidu",
+      "ratio": 0.04
+    }
+  ]
+}

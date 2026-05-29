@@ -1,13 +1,21 @@
+function numberValue(value) {
+  const number = Number(value)
+  return Number.isFinite(number) ? number : value
+}
+
 export function normalizeHolding(holding = {}) {
+  const weightContribution = numberValue(holding.weightContribution ?? holding.weight_contribution)
+
   return {
     stockCode: holding.stockCode ?? holding.stock_code ?? '',
     stockName: holding.stockName ?? holding.stock_name ?? '',
     marketSymbol: holding.marketSymbol ?? holding.market_symbol ?? '',
-    ratio: holding.ratio,
-    changePct: holding.changePct ?? holding.change_pct,
-    lastPrice: holding.lastPrice ?? holding.last_price,
-    prevClose: holding.prevClose ?? holding.prev_close,
-    weightContribution: holding.weightContribution ?? holding.weight_contribution,
+    ratio: numberValue(holding.ratio),
+    changePct: numberValue(holding.changePct ?? holding.change_pct),
+    lastPrice: numberValue(holding.lastPrice ?? holding.last_price),
+    prevClose: numberValue(holding.prevClose ?? holding.prev_close),
+    weightContribution,
+    contribution: numberValue(holding.contribution ?? weightContribution),
     status: holding.status ?? '',
   }
 }
@@ -16,9 +24,9 @@ export function normalizeFund(fund = {}) {
   return {
     fundCode: fund.fundCode ?? fund.fund_code ?? '',
     fundName: fund.fundName ?? fund.fund_name ?? '',
-    estimatedNav: fund.estimatedNav ?? fund.estimated_nav,
-    estimatedChangePct: fund.estimatedChangePct ?? fund.estimated_change_pct,
-    baseNav: fund.baseNav ?? fund.base_nav,
+    estimatedNav: numberValue(fund.estimatedNav ?? fund.estimated_nav),
+    estimatedChangePct: numberValue(fund.estimatedChangePct ?? fund.estimated_change_pct),
+    baseNav: numberValue(fund.baseNav ?? fund.base_nav),
     updatedAt: fund.updatedAt ?? fund.updated_at ?? '',
     status: fund.status ?? '',
     error: fund.error ?? '',

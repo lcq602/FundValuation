@@ -2,6 +2,7 @@ package org.dsb.fundvaluation.controller;
 
 import tools.jackson.databind.node.ObjectNode;
 import org.dsb.fundvaluation.service.FundFileService;
+import org.dsb.fundvaluation.service.SnapshotService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,11 @@ import java.util.Map;
 public class FundAdminController {
 
     private final FundFileService fundFileService;
+    private final SnapshotService snapshotService;
 
-    public FundAdminController(FundFileService fundFileService) {
+    public FundAdminController(FundFileService fundFileService, SnapshotService snapshotService) {
         this.fundFileService = fundFileService;
+        this.snapshotService = snapshotService;
     }
 
     @GetMapping
@@ -33,6 +36,12 @@ public class FundAdminController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/sync")
+    public ResponseEntity<?> syncFunds() {
+        snapshotService.reloadFundDataAndRebuildSnapshot();
+        return ResponseEntity.ok(Map.of("message", "同步成功"));
+    }
+
     @PostMapping
     public ResponseEntity<?> createFund(@RequestBody ObjectNode fundNode) throws IOException {
         if (!fundNode.has("fund_code") || fundNode.get("fund_code").asText().isBlank()) {
@@ -44,6 +53,7 @@ public class FundAdminController {
                     .body(Map.of("error", "Fund already exists: " + code));
         }
         fundFileService.saveFund(fundNode);
+        snapshotService.reloadFundDataAndRebuildSnapshot();
         return ResponseEntity.status(HttpStatus.CREATED).body(fundNode);
     }
 
@@ -60,6 +70,7 @@ public class FundAdminController {
             }
         }
         fundFileService.saveFund(fundNode);
+        snapshotService.reloadFundDataAndRebuildSnapshot();
         return ResponseEntity.ok(fundNode);
     }
 
@@ -67,6 +78,7 @@ public class FundAdminController {
     public ResponseEntity<?> deleteFund(@PathVariable String code) throws IOException {
         try {
             fundFileService.deleteFund(code);
+            snapshotService.reloadFundDataAndRebuildSnapshot();
             return ResponseEntity.noContent().build();
         } catch (NoSuchFileException e) {
             return ResponseEntity.notFound().build();

@@ -1,0 +1,32 @@
+{
+  "fund_code": "001784",
+  "fund_name": "天弘全球高端制造混合(QDII)A",
+  "tags": ["overseas", "qdii", "manufacturing"],
+  "holdings": [
+    {
+      "stock_code": "CAT",
+      "stock_name": "Caterpillar",
+      "ratio": 0.08
+    },
+    {
+      "stock_code": "DE",
+      "stock_name": "Deere",
+      "ratio": 0.07
+    },
+    {
+      "stock_code": "HON",
+      "stock_name": "Honeywell",
+      "ratio": 0.06
+    },
+    {
+      "stock_code": "BA",
+      "stock_name": "Boeing",
+      "ratio": 0.05
+    },
+    {
+      "stock_code": "LMT",
+      "stock_name": "Lockheed Martin",
+      "ratio": 0.05
+    }
+  ]
+}

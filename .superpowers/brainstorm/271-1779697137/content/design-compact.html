@@ -1,0 +1,111 @@
+<h2>紧凑版设计 — 更高效利用空间</h2>
+<p class="subtitle">左侧列表 + 右侧内容（或者列表本身更紧凑）</p>
+
+<h3>方案 A：左侧列表 + 右侧编辑区</h3>
+<div class="mockup" style="margin-bottom: 16px;">
+  <div class="mockup-body" style="padding: 0;">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 10px 20px; display: flex; align-items: center; gap: 24px;">
+      <div style="color: #fff; font-weight: 700; font-size: 14px;">📊 FundValuation</div>
+      <div style="display: flex; gap: 2px;">
+        <div style="color: rgba(255,255,255,0.75); padding: 6px 12px; font-size: 12px; border-radius: 6px; background: rgba(255,255,255,0.15);">基金列表</div>
+        <div style="color: rgba(255,255,255,0.6); padding: 6px 12px; font-size: 12px;">编辑器</div>
+        <div style="color: rgba(255,255,255,0.6); padding: 6px 12px; font-size: 12px;">查询</div>
+      </div>
+    </div>
+    <div style="display: flex; background: linear-gradient(135deg, #f0f4ff 0%, #e8ecf4 100%); min-height: 320px;">
+      <!-- Sidebar List -->
+      <div style="width: 300px; background: rgba(255,255,255,0.5); backdrop-filter: blur(10px); border-right: 1px solid rgba(255,255,255,0.3); padding: 12px;">
+        <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+          <div class="mock-input" placeholder="搜索..." style="flex: 1; font-size: 12px; padding: 5px 8px; background: rgba(255,255,255,0.6);"></div>
+          <button class="mock-button" style="background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; padding: 5px 10px; font-size: 11px;">+</button>
+        </div>
+        <!-- Compact list items -->
+        <div style="background: rgba(255,255,255,0.7); border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); overflow: hidden;">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 10px; border-bottom: 1px solid rgba(0,0,0,0.03);">
+            <div><span style="font-weight: 600; color: #667eea; font-size: 12px;">000001</span><span style="color: #1e293b; font-size: 12px; margin-left: 6px;">示例基金A</span></div>
+            <span style="padding: 2px 8px; font-size: 11px; border-radius: 4px; background: rgba(102, 126, 234, 0.08); color: #667eea; cursor: pointer;">编辑</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 10px; border-bottom: 1px solid rgba(0,0,0,0.03); background: rgba(102, 126, 234, 0.05);">
+            <div><span style="font-weight: 600; color: #667eea; font-size: 12px;">000002</span><span style="color: #1e293b; font-size: 12px; margin-left: 6px;">稳健增长混合</span></div>
+            <span style="padding: 2px 8px; font-size: 11px; border-radius: 4px; background: rgba(102, 126, 234, 0.08); color: #667eea; cursor: pointer;">编辑</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 7px 10px;">
+            <div><span style="font-weight: 600; color: #667eea; font-size: 12px;">000003</span><span style="color: #1e293b; font-size: 12px; margin-left: 6px;">科技先锋ETF</span></div>
+            <span style="padding: 2px 8px; font-size: 11px; border-radius: 4px; background: rgba(102, 126, 234, 0.08); color: #667eea; cursor: pointer;">编辑</span>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 8px;">共 3 只基金</div>
+      </div>
+      <!-- Content Area -->
+      <div style="flex: 1; padding: 16px;">
+        <div style="background: rgba(255,255,255,0.5); backdrop-filter: blur(12px); border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); padding: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div style="font-weight: 600; font-size: 14px;">000001 - 示例基金A</div>
+            <button class="mock-button" style="background: #10b981; color: #fff; padding: 5px 12px; font-size: 12px;">保存</button>
+          </div>
+          <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+            <div style="flex: 1;"><div style="font-size: 11px; color: #64748b;">基金代码</div><div style="background: rgba(255,255,255,0.3); padding: 5px 8px; border-radius: 6px; font-size: 12px; margin-top: 2px;">000001</div></div>
+            <div style="flex: 2;"><div style="font-size: 11px; color: #64748b;">基金名称</div><div class="mock-input" style="font-size: 12px; padding: 5px 8px; margin-top: 2px; background: rgba(255,255,255,0.3);"></div></div>
+          </div>
+          <!-- Holdings Table -->
+          <div style="font-size: 12px; font-weight: 500; margin-bottom: 6px;">持仓列表 (3 只)</div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <tr><td style="padding: 5px 8px; border-bottom: 1px solid rgba(0,0,0,0.04); color: #64748b;">#</td><td style="padding: 5px 8px; border-bottom: 1px solid rgba(0,0,0,0.04); color: #64748b;">股票代码</td><td style="padding: 5px 8px; border-bottom: 1px solid rgba(0,0,0,0.04); color: #64748b;">名称</td><td style="padding: 5px 8px; border-bottom: 1px solid rgba(0,0,0,0.04); color: #64748b;">比例</td><td style="padding: 5px 8px; border-bottom: 1px solid rgba(0,0,0,0.04); color: #64748b;"></td></tr>
+            <tr><td style="padding: 5px 8px; border-bottom: 1px solid rgba(0,0,0,0.04);">1</td><td style="padding: 5px 8px; border-bottom: 1px solid rgba(0,0,0,0.04);">00700</td><td style="padding: 5px 8px; border-bottom: 1px solid rgba(0,0,0,0.04);">腾讯控股</td><td style="padding: 5px 8px; border-bottom: 1px solid rgba(0,0,0,0.04);">0.15</td><td style="padding: 5px 8px; border-bottom: 1px solid rgba(0,0,0,0.04);"><span style="color: #ef4444; font-size: 11px;">删除</span></td></tr>
+            <tr><td style="padding: 5px 8px;">2</td><td style="padding: 5px 8px;">01810</td><td style="padding: 5px 8px;">小米集团</td><td style="padding: 5px 8px;">0.10</td><td style="padding: 5px 8px;"><span style="color: #ef4444; font-size: 11px;">删除</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 style="margin-top: 20px;">方案 B：独立页面 + 紧凑列表</h3>
+<p class="subtitle">保持你现在的 Tab 切换结构，但列表更紧凑、卡片更小</p>
+<div class="mockup">
+  <div class="mockup-body" style="padding: 0;">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 10px 20px; display: flex; align-items: center; gap: 24px;">
+      <div style="color: #fff; font-weight: 700; font-size: 14px;">📊 FundValuation</div>
+      <div style="display: flex; gap: 2px;">
+        <div style="color: rgba(255,255,255,0.75); padding: 6px 12px; font-size: 12px; border-radius: 6px; background: rgba(255,255,255,0.15);">基金列表</div>
+        <div style="color: rgba(255,255,255,0.6); padding: 6px 12px; font-size: 12px;">编辑器</div>
+        <div style="color: rgba(255,255,255,0.6); padding: 6px 12px; font-size: 12px;">查询</div>
+      </div>
+    </div>
+    <div style="padding: 20px; background: linear-gradient(135deg, #f0f4ff 0%, #e8ecf4 100%);">
+      <!-- Compact toolbar -->
+      <div style="display: flex; gap: 6px; margin-bottom: 12px; align-items: center;">
+        <div class="mock-input" placeholder="搜索基金代码或名称..." style="width: 180px; font-size: 12px; padding: 5px 8px; background: rgba(255,255,255,0.6);"></div>
+        <button class="mock-button" style="background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; padding: 5px 10px; font-size: 11px;">+ 新建</button>
+        <button class="mock-button" style="background: rgba(255,255,255,0.5); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3); padding: 5px 10px; font-size: 11px;">同步</button>
+        <span style="margin-left: auto; font-size: 11px; color: #94a3b8;">共 3 只基金</span>
+      </div>
+      <!-- Compact grid of cards instead of one tall list -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px;">
+        <div style="background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); padding: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div><span style="font-weight: 600; color: #667eea; font-size: 13px;">000001</span></div>
+            <span style="padding: 2px 8px; font-size: 11px; border-radius: 4px; background: rgba(102, 126, 234, 0.08); color: #667eea; cursor: pointer;">编辑</span>
+          </div>
+          <div style="font-size: 12px; color: #1e293b; margin-top: 2px;">示例基金A</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); padding: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div><span style="font-weight: 600; color: #667eea; font-size: 13px;">000002</span></div>
+            <span style="padding: 2px 8px; font-size: 11px; border-radius: 4px; background: rgba(102, 126, 234, 0.08); color: #667eea; cursor: pointer;">编辑</span>
+          </div>
+          <div style="font-size: 12px; color: #1e293b; margin-top: 2px;">稳健增长混合</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); padding: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div><span style="font-weight: 600; color: #667eea; font-size: 13px;">000003</span></div>
+            <span style="padding: 2px 8px; font-size: 11px; border-radius: 4px; background: rgba(102, 126, 234, 0.08); color: #667eea; cursor: pointer;">编辑</span>
+          </div>
+          <div style="font-size: 12px; color: #1e293b; margin-top: 2px;">科技先锋ETF</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top: 12px;">你倾向方案 A（左侧列表 + 右侧编辑区）还是方案 B（列表页卡片网格）？或者保持现有纵向列表但更紧凑就好？</p>

@@ -1,0 +1,95 @@
+<h2>毛玻璃渐变风 — 设计方案细化</h2>
+<p class="subtitle">这是整体页面的设计预览</p>
+
+<div class="mockup" style="margin-bottom: 16px;">
+  <div class="mockup-header">整体页面布局预览</div>
+  <div class="mockup-body" style="padding: 0;">
+    <!-- Header -->
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px 20px; display: flex; align-items: center; gap: 24px;">
+      <div style="color: #fff; font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">📊 FundValuation</div>
+      <div style="display: flex; gap: 2px;">
+        <div style="color: rgba(255,255,255,0.75); padding: 6px 14px; font-size: 13px; border-radius: 6px; background: rgba(255,255,255,0.15);">基金列表</div>
+        <div style="color: rgba(255,255,255,0.6); padding: 6px 14px; font-size: 13px;">编辑器</div>
+        <div style="color: rgba(255,255,255,0.6); padding: 6px 14px; font-size: 13px;">查询</div>
+      </div>
+    </div>
+    <!-- Content -->
+    <div style="padding: 20px; background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%); min-height: 300px;">
+      <!-- Toolbar -->
+      <div style="display: flex; gap: 8px; margin-bottom: 16px; align-items: center;">
+        <div class="mock-input" placeholder="搜索基金代码或名称..." style="width: 200px; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3);"></div>
+        <button class="mock-button" style="background: linear-gradient(135deg, #667eea, #764ba2); color: #fff;">+ 新建基金</button>
+        <button class="mock-button" style="background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3);">同步数据</button>
+        <div style="margin-left: auto; font-size: 11px; color: #94a3b8;">共 12 只基金</div>
+      </div>
+      <!-- List Card -->
+      <div style="background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 4px 20px rgba(0,0,0,0.04); overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px;">
+          <div><span style="font-weight: 600; color: #667eea; font-size: 13px;">000001</span><span style="color: #1e293b; font-size: 13px; margin-left: 8px;">示例基金 A</span></div>
+          <div style="display: flex; gap: 4px;">
+            <span style="padding: 4px 10px; font-size: 11px; border-radius: 6px; background: rgba(102, 126, 234, 0.1); color: #667eea; cursor: pointer;">编辑</span>
+            <span style="padding: 4px 10px; font-size: 11px; border-radius: 6px; background: rgba(239, 68, 68, 0.1); color: #ef4444; cursor: pointer;">删除</span>
+          </div>
+        </div>
+        <div style="height: 1px; background: rgba(0,0,0,0.04);"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px;">
+          <div><span style="font-weight: 600; color: #667eea; font-size: 13px;">000002</span><span style="color: #1e293b; font-size: 13px; margin-left: 8px;">示例基金 B</span></div>
+          <div style="display: flex; gap: 4px;">
+            <span style="padding: 4px 10px; font-size: 11px; border-radius: 6px; background: rgba(102, 126, 234, 0.1); color: #667eea; cursor: pointer;">编辑</span>
+            <span style="padding: 4px 10px; font-size: 11px; border-radius: 6px; background: rgba(239, 68, 68, 0.1); color: #ef4444; cursor: pointer;">删除</span>
+          </div>
+        </div>
+      </div>
+      <!-- Modal -->
+      <div style="margin-top: 16px; background: rgba(255,255,255,0.7); backdrop-filter: blur(16px); border-radius: 16px; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 8px 32px rgba(0,0,0,0.08); padding: 20px; width: 360px;">
+        <div style="font-weight: 600; font-size: 15px; margin-bottom: 12px;">新建基金</div>
+        <div style="margin-bottom: 12px;">
+          <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">基金代码</div>
+          <div class="mock-input" style="background: rgba(255,255,255,0.5);"></div>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">基金名称</div>
+          <div class="mock-input" style="background: rgba(255,255,255,0.5);"></div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <span style="padding: 6px 14px; font-size: 12px; border-radius: 8px; background: rgba(0,0,0,0.04); color: #64748b; cursor: pointer;">取消</span>
+          <span style="padding: 6px 14px; font-size: 12px; border-radius: 8px; background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; cursor: pointer;">创建</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>配色方案</h3>
+  <div style="display: flex; gap: 8px; margin-top: 8px;">
+    <div style="background: linear-gradient(135deg, #667eea, #764ba2); width: 48px; height: 48px; border-radius: 10px;" title="渐变主色"></div>
+    <div style="background: #f5f7fa; width: 48px; height: 48px; border-radius: 10px; border: 1px solid #e2e8f0;" title="背景色"></div>
+    <div style="background: #1e293b; width: 48px; height: 48px; border-radius: 10px;" title="文字主色"></div>
+    <div style="background: #64748b; width: 48px; height: 48px; border-radius: 10px;" title="文字次要色"></div>
+    <div style="background: #ef4444; width: 48px; height: 48px; border-radius: 10px;" title="危险/删除红"></div>
+    <div style="background: #10b981; width: 48px; height: 48px; border-radius: 10px;" title="成功绿"></div>
+  </div>
+</div>
+
+<div class="pros-cons">
+  <div class="pros">
+    <h4>这个设计的优点</h4>
+    <ul>
+      <li>相比传统后台显得更时尚、有品质感</li>
+      <li>毛玻璃效果让信息层级更清晰</li>
+      <li>渐变紫配色适合金融类工具（稳重中带活力）</li>
+      <li>所有组件保留原有功能，纯 CSS 改造</li>
+    </ul>
+  </div>
+  <div class="cons">
+    <h4>注意事项</h4>
+    <ul>
+      <li>毛玻璃效果在低配机器上可能轻微性能开销</li>
+      <li>背景渐变需要保持足够对比度</li>
+      <li>保持简洁不要过度装饰</li>
+    </ul>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top: 12px;">看看这个预览，你觉得怎么样？可以点击选中确认，然后告诉我你的想法。</p>

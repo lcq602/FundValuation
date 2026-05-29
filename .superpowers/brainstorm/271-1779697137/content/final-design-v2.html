@@ -1,0 +1,79 @@
+<h2>最终方案 v2 — 持仓表格压缩</h2>
+<p class="subtitle">表格行距减小，限制高度，紧凑展示</p>
+
+<h3>编辑面板：持仓表格更紧凑</h3>
+<div class="mockup" style="margin-bottom: 16px;">
+  <div class="mockup-body" style="padding: 0;">
+    <div style="background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); margin: 12px; padding: 16px; border-radius: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div><span style="font-weight: 600; font-size: 15px; color: #1e293b;">000001</span><span style="font-size: 14px; color: #64748b; margin-left: 8px;">示例基金A</span></div>
+        <div style="display: flex; gap: 6px;">
+          <button class="mock-button" style="background: rgba(0,0,0,0.04); padding: 5px 10px; font-size: 11px; border-radius: 6px;">重置</button>
+          <button class="mock-button" style="background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; padding: 5px 12px; font-size: 11px; border-radius: 6px;">保存</button>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+        <div style="flex: 1;">
+          <div style="font-size: 11px; color: #64748b; margin-bottom: 3px;">基金代码</div>
+          <div style="background: rgba(0,0,0,0.03); padding: 5px 8px; border-radius: 6px; font-size: 12px; color: #94a3b8;">000001</div>
+        </div>
+        <div style="flex: 2;">
+          <div style="font-size: 11px; color: #64748b; margin-bottom: 3px;">基金名称</div>
+          <div class="mock-input" style="font-size: 12px; padding: 5px 8px; background: rgba(255,255,255,0.4); border-radius: 6px;"></div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <div style="font-size: 12px; font-weight: 500; color: #1e293b;">持仓列表</div>
+        <button class="mock-button" style="background: rgba(102,126,234,0.08); color: #667eea; padding: 3px 8px; font-size: 11px; border-radius: 5px;">+ 添加</button>
+      </div>
+      <!-- Compact table - reduced padding -->
+      <div style="max-height: 210px; overflow-y: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+          <thead>
+            <tr style="background: rgba(0,0,0,0.02);">
+              <th style="padding: 4px 6px; text-align: left; color: #64748b; font-weight: 500; font-size: 11px;">#</th>
+              <th style="padding: 4px 6px; text-align: left; color: #64748b; font-weight: 500; font-size: 11px;">股票代码</th>
+              <th style="padding: 4px 6px; text-align: left; color: #64748b; font-weight: 500; font-size: 11px;">股票名称</th>
+              <th style="padding: 4px 6px; text-align: left; color: #64748b; font-weight: 500; font-size: 11px; width: 100px;">比例</th>
+              <th style="padding: 4px 6px; text-align: left; color: #64748b; font-weight: 500; font-size: 11px; width: 40px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03); color: #94a3b8; font-size: 11px;">1</td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px; width: 80px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><span style="color: #ef4444; font-size: 10px;">✕</span></td>
+            </tr>
+            <tr>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03); color: #94a3b8; font-size: 11px;">2</td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px; width: 80px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><span style="color: #ef4444; font-size: 10px;">✕</span></td>
+            </tr>
+            <tr>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03); color: #94a3b8; font-size: 11px;">3</td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px; width: 80px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><span style="color: #ef4444; font-size: 10px;">✕</span></td>
+            </tr>
+            <tr>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03); color: #94a3b8; font-size: 11px;">4</td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><div class="mock-input" style="padding: 3px 5px; font-size: 11px; background: rgba(255,255,255,0.3); border-radius: 4px; width: 80px;"></div></td>
+              <td style="padding: 3px 6px; border-top: 1px solid rgba(0,0,0,0.03);"><span style="color: #ef4444; font-size: 10px;">✕</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle">表格行距缩减到 3px padding，表头更小，整体高度紧凑。持仓多时内部滚动。</p>
+<p class="subtitle">现在这个方案你满意吗？确认后我就开始写设计文档和实现代码。</p>

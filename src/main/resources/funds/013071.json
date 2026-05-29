@@ -1,0 +1,32 @@
+{
+  "fund_code": "013071",
+  "fund_name": "创金合信全球医药生物A",
+  "tags": ["overseas", "qdii", "healthcare"],
+  "holdings": [
+    {
+      "stock_code": "LLY",
+      "stock_name": "Eli Lilly",
+      "ratio": 0.12
+    },
+    {
+      "stock_code": "JNJ",
+      "stock_name": "Johnson & Johnson",
+      "ratio": 0.10
+    },
+    {
+      "stock_code": "UNH",
+      "stock_name": "UnitedHealth",
+      "ratio": 0.08
+    },
+    {
+      "stock_code": "PFE",
+      "stock_name": "Pfizer",
+      "ratio": 0.06
+    },
+    {
+      "stock_code": "MRK",
+      "stock_name": "Merck",
+      "ratio": 0.05
+    }
+  ]
+}

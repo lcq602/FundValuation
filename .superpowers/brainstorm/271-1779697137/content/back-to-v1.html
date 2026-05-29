@@ -1,0 +1,60 @@
+<h2>最终方案确认 — 第一版风格</h2>
+<p class="subtitle">保留原有 Tab 导航和独立页面布局，只改视觉风格</p>
+
+<div class="mockup" style="margin-bottom: 16px;">
+  <div class="mockup-header">整体效果</div>
+  <div class="mockup-body" style="padding: 0;">
+    <!-- Header with glass gradient -->
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px 24px; display: flex; align-items: center; gap: 24px;">
+      <div style="color: #fff; font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">📊 FundValuation</div>
+      <div style="display: flex; gap: 2px;">
+        <div style="color: rgba(255,255,255,0.75); padding: 6px 16px; font-size: 13px; border-radius: 6px; background: rgba(255,255,255,0.15);">基金列表</div>
+        <div style="color: rgba(255,255,255,0.65); padding: 6px 16px; font-size: 13px;">编辑器</div>
+        <div style="color: rgba(255,255,255,0.65); padding: 6px 16px; font-size: 13px;">查询</div>
+      </div>
+    </div>
+    <!-- Content -->
+    <div style="padding: 24px; background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%); min-height: 300px;">
+      <!-- Toolbar -->
+      <div style="display: flex; gap: 8px; margin-bottom: 16px; align-items: center;">
+        <div class="mock-input" placeholder="搜索基金代码或名称..." style="width: 200px; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3);"></div>
+        <button class="mock-button" style="background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; padding: 6px 14px; font-size: 12px; border-radius: 6px;">+ 新建基金</button>
+        <button class="mock-button" style="background: rgba(255,255,255,0.5); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3); padding: 6px 14px; font-size: 12px; border-radius: 6px;">同步数据</button>
+        <span style="margin-left: auto; font-size: 12px; color: #94a3b8;">共 12 只基金</span>
+      </div>
+      <!-- Fund List Card -->
+      <div style="background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 4px 20px rgba(0,0,0,0.04); overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px;">
+          <span><span style="font-weight: 600; color: #667eea; font-size: 13px;">000001</span><span style="color: #1e293b; font-size: 13px; margin-left: 8px;">示例基金 A</span></span>
+          <div style="display: flex; gap: 4px;">
+            <span style="padding: 3px 10px; font-size: 12px; border-radius: 5px; background: rgba(102,126,234,0.1); color: #667eea; cursor: pointer;">编辑</span>
+            <span style="padding: 3px 10px; font-size: 12px; border-radius: 5px; background: rgba(239,68,68,0.1); color: #ef4444; cursor: pointer;">删除</span>
+          </div>
+        </div>
+        <div style="height: 1px; background: rgba(0,0,0,0.04);"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px;">
+          <span><span style="font-weight: 600; color: #667eea; font-size: 13px;">000002</span><span style="color: #1e293b; font-size: 13px; margin-left: 8px;">示例基金 B</span></span>
+          <div style="display: flex; gap: 4px;">
+            <span style="padding: 3px 10px; font-size: 12px; border-radius: 5px; background: rgba(102,126,234,0.1); color: #667eea; cursor: pointer;">编辑</span>
+            <span style="padding: 3px 10px; font-size: 12px; border-radius: 5px; background: rgba(239,68,68,0.1); color: #ef4444; cursor: pointer;">删除</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>变更总结</h3>
+  <ul>
+    <li><strong>布局</strong>：保持原有 Tab 切换结构（基金列表 / 编辑器 / 查询），不变</li>
+    <li><strong>导航栏</strong>：深色 #001529 → 渐变紫 linear-gradient(135deg, #667eea, #764ba2)</li>
+    <li><strong>背景</strong>：纯灰 #f0f2f5 → 柔紫渐变背景</li>
+    <li><strong>卡片</strong>：纯白 → 毛玻璃半透明白 (rgba(255,255,255,0.6) + backdrop-filter)</li>
+    <li><strong>按钮</strong>：扁平蓝 → 渐变紫主按钮 / 毛玻璃次要按钮</li>
+    <li><strong>弹窗</strong>：纯白 → 毛玻璃大圆角</li>
+    <li><strong>字体</strong>：保持原有大小体系，颜色微调更柔和</li>
+  </ul>
+</div>
+
+<p class="subtitle">这样可以吗？确认后我立刻开始写设计文档并实现。</p>

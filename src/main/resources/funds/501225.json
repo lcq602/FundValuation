@@ -1,0 +1,32 @@
+{
+  "fund_code": "501225",
+  "fund_name": "景顺长城全球半导体芯片股票(QDII-LOF)",
+  "tags": ["overseas", "qdii", "semiconductor"],
+  "holdings": [
+    {
+      "stock_code": "NVDA",
+      "stock_name": "NVIDIA",
+      "ratio": 0.15
+    },
+    {
+      "stock_code": "TSM",
+      "stock_name": "TSMC",
+      "ratio": 0.12
+    },
+    {
+      "stock_code": "ASML",
+      "stock_name": "ASML",
+      "ratio": 0.10
+    },
+    {
+      "stock_code": "AMAT",
+      "stock_name": "Applied Materials",
+      "ratio": 0.08
+    },
+    {
+      "stock_code": "LRCX",
+      "stock_name": "Lam Research",
+      "ratio": 0.06
+    }
+  ]
+}

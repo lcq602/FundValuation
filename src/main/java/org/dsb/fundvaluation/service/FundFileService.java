@@ -1,6 +1,7 @@
 package org.dsb.fundvaluation.service;
 
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,9 +50,11 @@ public class FundFileService {
         for (Path p : jsonFiles) {
             try {
                 var node = objectMapper.readTree(p.toFile());
-                String code = node.has("fund_code") ? node.get("fund_code").asText() : "";
-                String name = node.has("fund_name") ? node.get("fund_name").asText() : "";
+                String code = text(node, "fund_code", "fundCode", "code");
+                String name = text(node, "fund_name", "fundName", "name");
                 Map<String, String> entry = new LinkedHashMap<>();
+                entry.put("code", code);
+                entry.put("name", name);
                 entry.put("fund_code", code);
                 entry.put("fund_name", name);
                 entry.put("file_name", p.getFileName().toString());
@@ -61,6 +64,15 @@ public class FundFileService {
             }
         }
         return result;
+    }
+
+    private String text(JsonNode node, String... fields) {
+        for (String field : fields) {
+            if (node.has(field) && !node.get(field).isNull()) {
+                return node.get(field).asText();
+            }
+        }
+        return "";
     }
 
     public Optional<ObjectNode> getFund(String fundCode) throws IOException {

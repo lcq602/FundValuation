@@ -2,6 +2,9 @@ const isProd = import.meta.env?.PROD === true
 const API_BASE = isProd ? 'http://140.143.235.93:5000' : ''
 
 export const SNAPSHOT_API = `${API_BASE}/api/snapshot`
+export const NEWS_API = `${API_BASE}/api/news`
+export const OVERSEAS_API = `${API_BASE}/api/overseas`
+export const OVERSEAS_TIME_PERIOD_API = `${API_BASE}/api/time-period`
 
 export async function readJsonResponse(response) {
   const contentType = response.headers.get('content-type') || ''

@@ -1,42 +1,37 @@
 {
-  "fund_code": "012920",
-  "fund_name": "易方达全球成长精选混合(QDII)",
+  "fund_code": "270023",
+  "fund_name": "广发全球精选人民币A",
   "tags": ["overseas", "qdii"],
   "holdings": [
     {
       "stock_code": "AAPL",
       "stock_name": "Apple",
-      "ratio": 0.08
+      "ratio": 0.10
     },
     {
       "stock_code": "MSFT",
       "stock_name": "Microsoft",
-      "ratio": 0.07
+      "ratio": 0.09
     },
     {
       "stock_code": "NVDA",
       "stock_name": "NVIDIA",
-      "ratio": 0.06
-    },
-    {
-      "stock_code": "TSM",
-      "stock_name": "TSMC",
-      "ratio": 0.05
+      "ratio": 0.08
     },
     {
       "stock_code": "GOOGL",
       "stock_name": "Alphabet",
-      "ratio": 0.05
-    },
-    {
-      "stock_code": "AMZN",
-      "stock_name": "Amazon",
-      "ratio": 0.04
+      "ratio": 0.07
     },
     {
       "stock_code": "META",
       "stock_name": "Meta",
-      "ratio": 0.04
+      "ratio": 0.06
+    },
+    {
+      "stock_code": "AMZN",
+      "stock_name": "Amazon",
+      "ratio": 0.05
     }
   ]
 }

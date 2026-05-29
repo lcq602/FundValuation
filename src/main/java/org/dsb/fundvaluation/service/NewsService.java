@@ -4,6 +4,7 @@ import org.dsb.fundvaluation.dto.NewsItem;
 import org.dsb.fundvaluation.dto.NewsResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -38,6 +39,7 @@ public class NewsService {
     private final ObjectMapper objectMapper;
     private final Clock clock;
 
+    @Autowired
     public NewsService(RestTemplate restTemplate, StringRedisTemplate redisTemplate, ObjectMapper objectMapper) {
         this(restTemplate, redisTemplate, objectMapper, Clock.systemUTC());
     }

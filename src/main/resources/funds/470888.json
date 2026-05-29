@@ -1,0 +1,32 @@
+{
+  "fund_code": "470888",
+  "fund_name": "汇添富香港优势精选混合(QDII)A",
+  "tags": ["overseas", "qdii", "hongkong"],
+  "holdings": [
+    {
+      "stock_code": "0700",
+      "stock_name": "腾讯控股",
+      "ratio": 0.12
+    },
+    {
+      "stock_code": "9988",
+      "stock_name": "阿里巴巴",
+      "ratio": 0.10
+    },
+    {
+      "stock_code": "3690",
+      "stock_name": "美团",
+      "ratio": 0.08
+    },
+    {
+      "stock_code": "9618",
+      "stock_name": "京东",
+      "ratio": 0.06
+    },
+    {
+      "stock_code": "9868",
+      "stock_name": "小鹏汽车",
+      "ratio": 0.05
+    }
+  ]
+}

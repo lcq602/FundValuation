@@ -1,41 +1,32 @@
 {
   "fund_code": "000001",
-  "fund_name": "Fund Valuation Sample B",
+  "fund_name": "A股科技基金",
+  "tags": ["a-share"],
   "holdings": [
     {
-      "stock_code": "TSM",
-      "stock_name": "TSMC",
-      "ratio": 0.102
+      "stock_code": "300502",
+      "stock_name": "新易盛",
+      "ratio": 0.15
     },
     {
-      "stock_code": "AAPL",
-      "stock_name": "Apple",
-      "ratio": 0.095
+      "stock_code": "300308",
+      "stock_name": "中际旭创",
+      "ratio": 0.12
     },
     {
-      "stock_code": "MSFT",
-      "stock_name": "Microsoft",
-      "ratio": 0.089
+      "stock_code": "688498",
+      "stock_name": "源杰科技",
+      "ratio": 0.10
     },
     {
-      "stock_code": "GOOGL",
-      "stock_name": "Alphabet A",
-      "ratio": 0.078
+      "stock_code": "002384",
+      "stock_name": "天孚通信",
+      "ratio": 0.08
     },
     {
-      "stock_code": "NVDA",
-      "stock_name": "NVIDIA",
-      "ratio": 0.072
-    },
-    {
-      "stock_code": "AMZN",
-      "stock_name": "Amazon",
-      "ratio": 0.064
-    },
-    {
-      "stock_code": "META",
-      "stock_name": "Meta Platforms",
-      "ratio": 0.05
+      "stock_code": "300394",
+      "stock_name": "天孚通信",
+      "ratio": 0.07
     }
   ]
 }

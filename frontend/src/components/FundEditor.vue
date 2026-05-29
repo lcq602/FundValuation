@@ -4,20 +4,20 @@
 
     <template v-else>
       <div class="toolbar">
-        <h3 style="margin: 0; font-size: 15px;">编辑: {{ fundCode }} - {{ fundName }}</h3>
+        <h3 class="editor-title">{{ fundCode }} - {{ fundName }}</h3>
         <button class="btn-success" @click="save" :disabled="saving">
           {{ saving ? '保存中...' : '保存' }}
         </button>
       </div>
 
-      <div v-if="saveMsg" :class="saveMsg.type === 'ok' ? 'btn-success' : 'error'" style="padding: 8px 12px; margin-bottom: 8px;">
+      <div v-if="saveMsg" :class="['msg-bar', saveMsg.type === 'ok' ? 'success' : 'error']">
         {{ saveMsg.text }}
       </div>
 
       <div class="card">
         <div class="form-group">
           <label>基金代码</label>
-          <input v-model="fundCode" disabled style="background: #f5f5f5;" />
+          <input v-model="fundCode" disabled />
         </div>
         <div class="form-group">
           <label>基金名称</label>
@@ -33,11 +33,11 @@
         <table class="holdings-table">
           <thead>
             <tr>
-              <th style="width: 40px;">#</th>
+              <th style="width: 32px;">#</th>
               <th>股票代码</th>
               <th>股票名称</th>
-              <th style="width: 120px;">持仓比例</th>
-              <th style="width: 60px;">操作</th>
+              <th style="width: 110px;">持仓比例</th>
+              <th style="width: 48px;">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -47,7 +47,7 @@
               <td><input v-model="h.stock_name" placeholder="股票名称" /></td>
               <td><input v-model="h.ratio" placeholder="如 0.15" type="number" step="0.001" /></td>
               <td>
-                <button class="btn-danger btn-sm" @click="removeRow(i)">删除</button>
+                <button class="btn-xs" style="background:var(--danger-light);color:var(--danger);" @click="removeRow(i)">删除</button>
               </td>
             </tr>
           </tbody>

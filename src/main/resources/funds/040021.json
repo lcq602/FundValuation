@@ -1,0 +1,32 @@
+{
+  "fund_code": "040021",
+  "fund_name": "华安大中华升级股票(QDII)A",
+  "tags": ["overseas", "qdii", "taiwan"],
+  "holdings": [
+    {
+      "stock_code": "2303",
+      "stock_name": "联发科",
+      "ratio": 0.12
+    },
+    {
+      "stock_code": "2330",
+      "stock_name": "台积电",
+      "ratio": 0.15
+    },
+    {
+      "stock_code": "2454",
+      "stock_name": "联发科",
+      "ratio": 0.08
+    },
+    {
+      "stock_code": "2317",
+      "stock_name": "鸿海",
+      "ratio": 0.06
+    },
+    {
+      "stock_code": "6718",
+      "stock_name": "港交所",
+      "ratio": 0.05
+    }
+  ]
+}

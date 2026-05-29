@@ -1,7 +1,9 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { readJsonResponse } from '../src/utils/api.js'
+import * as api from '../src/utils/api.js'
+
+const { readJsonResponse } = api
 
 test('readJsonResponse parses valid JSON', async () => {
   const response = new Response('{"ok":true}', {
@@ -22,4 +24,8 @@ test('readJsonResponse reports HTML responses as API address issues', async () =
     readJsonResponse(response),
     /接口返回了页面内容/,
   )
+})
+
+test('exports the backend time-period endpoint used by overseas valuation', () => {
+  assert.equal(api.OVERSEAS_TIME_PERIOD_API, '/api/time-period')
 })

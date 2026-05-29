@@ -29,7 +29,7 @@ test('normalizeSnapshot converts API snake_case fields to component camelCase fi
             change_pct: -0.65,
             last_price: 404.52,
             prev_close: 407.15,
-            weight_contribution: -0.0008,
+            weight_contribution: -0.08,
             ratio: 0.0707,
             status: 'ok',
           },
@@ -52,7 +52,8 @@ test('normalizeSnapshot converts API snake_case fields to component camelCase fi
   })
   assert.equal(normalized.details['012920'].baseNav, 4.0475)
   assert.equal(normalized.details['012920'].holdings[0].stockCode, 'TSM')
-  assert.equal(normalized.details['012920'].holdings[0].weightContribution, -0.0008)
+  assert.equal(normalized.details['012920'].holdings[0].weightContribution, -0.08)
+  assert.equal(normalized.details['012920'].holdings[0].contribution, -0.08)
 })
 
 test('normalizeSnapshot tolerates missing collections', () => {
