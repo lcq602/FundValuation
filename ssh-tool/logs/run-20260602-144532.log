@@ -1,0 +1,8 @@
+SSH Tool started.
+Connecting to root@140.143.235.93:22 (linux)
+ERROR: Command failed at line 4 with exit code 1: ./start.sh backup
+Traceback (most recent call last):
+  File "main.py", line 35, in main
+  File "ssh_tool\runner.py", line 31, in run_all
+  File "ssh_tool\runner.py", line 47, in _run_command
+RuntimeError: Command failed at line 4 with exit code 1: ./start.sh backup

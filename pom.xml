@@ -59,4 +59,36 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>deploy-ssh</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.5.0</version>
+                        <executions>
+                            <execution>
+                                <id>run-ssh-tool-after-package</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>cmd</executable>
+                                    <workingDirectory>${project.basedir}/ssh-tool</workingDirectory>
+                                    <arguments>
+                                        <argument>/c</argument>
+                                        <argument>echo. | ssh-tool.exe</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

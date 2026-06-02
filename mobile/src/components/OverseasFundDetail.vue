@@ -100,6 +100,8 @@ defineEmits(['close'])
   animation: slideUp 0.3s ease-out;
   max-height: 85vh;
   overflow-y: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
 }
 
 @keyframes slideUp {
@@ -127,16 +129,17 @@ defineEmits(['close'])
   padding: 2px 8px;
   background: var(--primary-light);
   color: var(--primary);
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
 .fund-basic .fund-name {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 700;
   margin: 0;
+  line-height: 1.35;
 }
 
 .fund-basic .fund-code {
@@ -168,6 +171,7 @@ defineEmits(['close'])
   background: var(--bg);
   border-radius: 8px;
   margin-bottom: 16px;
+  border: 1px solid var(--border);
 }
 
 .period-badge {
@@ -201,9 +205,10 @@ defineEmits(['close'])
 
 .contrib-card {
   background: var(--bg);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 12px;
   text-align: center;
+  border: 1px solid var(--border);
 }
 
 .contrib-value {
@@ -251,7 +256,8 @@ defineEmits(['close'])
   align-items: center;
   padding: 12px;
   background: var(--bg);
-  border-radius: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
 }
 
 .holding-left {
@@ -306,7 +312,7 @@ defineEmits(['close'])
   background: var(--primary);
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;

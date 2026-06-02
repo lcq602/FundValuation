@@ -22,22 +22,7 @@ public class OverseasValuationService {
     private static final Logger log = LoggerFactory.getLogger(OverseasValuationService.class);
     private static final ZoneId CHINA_ZONE = ZoneId.of("Asia/Shanghai");
 
-    // 美股开盘时间（北京时间，夏令时21:30，冬令时22:30）
-    private static final int US_MARKET_OPEN_HOUR_SUMMER = 21;
-    private static final int US_MARKET_OPEN_MINUTE_SUMMER = 30;
-    private static final int US_MARKET_OPEN_HOUR_WINTER = 22;
-    private static final int US_MARKET_OPEN_MINUTE_WINTER = 30;
-
-    // 美股收盘时间（北京时间，夏令时04:00，冬令时05:00）
-    private static final int US_MARKET_CLOSE_HOUR_SUMMER = 4;
-    private static final int US_MARKET_CLOSE_HOUR_WINTER = 5;
-
-    // A股交易时间
-    private static final int A_SHARE_OPEN_HOUR = 9;
-    private static final int A_SHARE_CLOSE_HOUR = 15;
-
     private static final String US_CLOSE_DATA_KEY = "fund:us:close:";
-    private static final String A_SHARE_CLOSE_DATA_KEY = "fund:a_share:close:";
 
     private final QuoteService quoteService;
     private final FundDataService fundDataService;
@@ -45,8 +30,6 @@ public class OverseasValuationService {
 
     // 缓存昨夜美股收盘数据
     private final Map<String, Quote> usCloseDataCache = new ConcurrentHashMap<>();
-    private LocalDate lastUsCloseDate = LocalDate.now();
-
     @Autowired
     public OverseasValuationService(QuoteService quoteService,
                                     FundDataService fundDataService,
@@ -126,7 +109,7 @@ public class OverseasValuationService {
                 .format(DateTimeFormatter.ofPattern("HH:mm")));
 
         // 判断是否为美股交易日
-        DayOfWeek day = now.getDayOfWeek();
+        DayOfWeek day = now.withZoneSameInstant(ZoneId.of("America/New_York")).getDayOfWeek();
         info.setUsMarketDay(day != DayOfWeek.SATURDAY && day != DayOfWeek.SUNDAY);
 
         return info;
@@ -161,7 +144,16 @@ public class OverseasValuationService {
             }
         } else {
             // 美股未开盘或已收盘，使用缓存数据
-            usQuotes = getCachedUsCloseData();
+            usQuotes = new LinkedHashMap<>(getCachedUsCloseData());
+            List<String> missingSymbols = missingQuoteSymbols(usSymbols, usQuotes);
+            if (!missingSymbols.isEmpty()) {
+                Map<String, Quote> fetchedQuotes = fetchQuotesSafely(missingSymbols);
+                if (!fetchedQuotes.isEmpty()) {
+                    usQuotes.putAll(fetchedQuotes);
+                    usCloseDataCache.putAll(fetchedQuotes);
+                    cacheUsCloseData(usQuotes);
+                }
+            }
         }
 
         // 计算美股部分贡献
@@ -215,17 +207,37 @@ public class OverseasValuationService {
         return usCloseDataCache;
     }
 
+    private List<String> missingQuoteSymbols(List<String> symbols, Map<String, Quote> quotes) {
+        List<String> missingSymbols = new ArrayList<>();
+        for (String symbol : symbols) {
+            Quote quote = quotes.get(symbol);
+            if (quote == null || quote.getPrevClose().compareTo(BigDecimal.ZERO) == 0) {
+                missingSymbols.add(symbol);
+            }
+        }
+        return missingSymbols;
+    }
+
+    private Map<String, Quote> fetchQuotesSafely(List<String> symbols) {
+        try {
+            return quoteService.fetchQuotes(symbols);
+        } catch (Exception e) {
+            log.warn("Failed to fetch fallback US quotes: {}", e.getMessage());
+            return Collections.emptyMap();
+        }
+    }
+
     private void loadCachedUsCloseData() {
-        String dateStr = LocalDate.now().minusDays(1).toString();
+        String dateStr = LocalDate.now().toString();
         try {
             String cached = redisTemplate.opsForValue().get(US_CLOSE_DATA_KEY + dateStr);
             if (cached != null && !cached.isEmpty()) {
                 // 解析缓存的美股收盘数据
-                // 格式: symbol,lastPrice,prevClose|symbol2,lastPrice,prevClose|...
+                // 格式: symbol,name,lastPrice,prevClose|symbol2,name,lastPrice,prevClose|...
                 String[] entries = cached.split("\\|");
                 for (String entry : entries) {
                     String[] parts = entry.split(",");
-                    if (parts.length >= 3) {
+                    if (parts.length >= 4) {
                         Quote quote = new Quote(
                                 parts[0],
                                 parts[1],
@@ -257,56 +269,23 @@ public class OverseasValuationService {
     }
 
     private TimePeriod determineTimePeriod(ZonedDateTime now) {
-        int hour = now.getHour();
-        int minute = now.getMinute();
-        DayOfWeek day = now.getDayOfWeek();
+        ZonedDateTime usNow = now.withZoneSameInstant(ZoneId.of("America/New_York"));
+        int hour = usNow.getHour();
+        int minute = usNow.getMinute();
+        DayOfWeek day = usNow.getDayOfWeek();
 
-        // 周末不交易
+        // 美股周末不交易
         if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
             return TimePeriod.WEEKEND;
         }
 
-        // 判断是否夏令时
-        boolean isSummerTime = isSummerTime(now.toLocalDate());
-
-        // A股交易时段: 09:30-11:30, 13:00-15:00
-        boolean isAShareTime = (hour == 9 && minute >= 30) || (hour >= 10 && hour < 11) ||
-                (hour == 11 && minute <= 30) || (hour >= 13 && hour < 15);
-
-        // 美股开盘时间
-        int usOpenHour = isSummerTime ? US_MARKET_OPEN_HOUR_SUMMER : US_MARKET_OPEN_HOUR_WINTER;
-        int usCloseHour = isSummerTime ? US_MARKET_CLOSE_HOUR_SUMMER : US_MARKET_CLOSE_HOUR_WINTER;
-
-        // 美股盘前（北京时间9:00-21:30/22:30）
-        if (hour < usOpenHour) {
-            return TimePeriod.US_MARKET_CLOSED;
-        }
-
-        // 美股盘中（北京时间21:30/22:30-04:00/05:00）
-        if (hour >= usOpenHour || hour < usCloseHour) {
+        boolean afterOpen = hour > 9 || (hour == 9 && minute >= 30);
+        boolean beforeClose = hour < 16;
+        if (afterOpen && beforeClose) {
             return TimePeriod.US_MARKET_OPEN;
         }
 
         return TimePeriod.US_MARKET_CLOSED;
-    }
-
-    private boolean isSummerTime(LocalDate date) {
-        // 美国夏令时：3月第二个周日到11月第一个周日
-        int year = date.getYear();
-        LocalDate springForward = LocalDate.of(year, 3, 1);
-        // 找到3月第二个周日
-        while (springForward.getDayOfWeek() != DayOfWeek.SUNDAY) {
-            springForward = springForward.plusDays(1);
-        }
-        springForward = springForward.plusWeeks(1);
-
-        LocalDate fallBack = LocalDate.of(year, 11, 1);
-        // 找到11月第一个周日
-        while (fallBack.getDayOfWeek() != DayOfWeek.SUNDAY) {
-            fallBack = fallBack.plusDays(1);
-        }
-
-        return date.isAfter(springForward.minusDays(1)) && date.isBefore(fallBack);
     }
 
     private String buildUsSymbol(String stockCode) {

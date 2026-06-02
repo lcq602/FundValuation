@@ -1,0 +1,7 @@
+cd /home/project/FundValuation
+ls -la
+./start.sh stop
+./start.sh backup > /tmp/fundvaluation-backup.log 2>&1
+rm FundValuation-0.0.1-SNAPSHOT.jar
+upload D:\ideaProject\FundValuation\target\FundValuation-0.0.1-SNAPSHOT.jar /home/project/FundValuation/FundValuation-0.0.1-SNAPSHOT.jar
+./start.sh start > /tmp/fundvaluation-start.log 2>&1

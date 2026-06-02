@@ -112,13 +112,13 @@
             <div class="text">暂无匹配资讯</div>
           </div>
           <div v-else class="news-list">
-            <a v-for="item in newsItems" :key="item.url" class="news-item" :href="item.url" target="_blank" rel="noreferrer">
+            <button v-for="item in newsItems" :key="item.url" class="news-item" @click="openNews(item)">
               <div class="news-title">{{ item.title }}</div>
               <div class="news-meta">
                 <span>{{ item.source || '资讯' }}</span>
                 <span>{{ newsTimeText(item) }}</span>
               </div>
-            </a>
+            </button>
             <div v-if="newsError" class="news-error">{{ newsError }}</div>
           </div>
         </section>
@@ -381,6 +381,13 @@
       :fund-name="currentFundName"
       @close="selectedHolding = null"
     />
+
+    <NewsDetailSheet
+      v-if="selectedNewsItem"
+      :item="selectedNewsItem"
+      :fallback-time="newsGeneratedAtText"
+      @close="selectedNewsItem = null"
+    />
   </div>
 </template>
 
@@ -389,9 +396,11 @@ import FundList from './components/FundList.vue'
 import FundDetail from './components/FundDetail.vue'
 import HoldingSheet from './components/HoldingSheet.vue'
 import OverseasFundDetail from './components/OverseasFundDetail.vue'
+import NewsDetailSheet from './components/NewsDetailSheet.vue'
 import { NEWS_API, SNAPSHOT_API, OVERSEAS_API, OVERSEAS_TIME_PERIOD_API, readJsonResponse } from './utils/api.js'
 import { normalizeSnapshot } from './utils/snapshot.js'
 import { normalizeOverseasFunds, normalizeTimePeriod } from './utils/overseas.js'
+import { normalizeNewsItems } from './utils/news.js'
 import { formatPct, pctClass } from './utils/formatters.js'
 
 const POLL_INTERVAL = 60000
@@ -400,7 +409,7 @@ const FAVORITES_KEY = 'fund_favorites'
 const DARK_MODE_KEY = 'fund_dark_mode'
 
 export default {
-  components: { FundList, FundDetail, HoldingSheet, OverseasFundDetail },
+  components: { FundList, FundDetail, HoldingSheet, OverseasFundDetail, NewsDetailSheet },
   data() {
     return {
       showIntro: true,
@@ -423,6 +432,7 @@ export default {
       newsError: '',
       newsPollTimer: null,
       newsRequestInFlight: false,
+      selectedNewsItem: null,
       // Overseas funds
       overseasFunds: [],
       overseasLoading: false,
@@ -659,7 +669,7 @@ export default {
         })
         const res = await fetch(`${NEWS_API}?${params.toString()}`)
         const data = await readJsonResponse(res)
-        this.newsItems = Array.isArray(data.items) ? data.items : []
+        this.newsItems = normalizeNewsItems(data.items)
         this.newsGeneratedAt = data.generated_at || data.generatedAt || 0
         this.newsError = data.error || ''
       } catch (e) {
@@ -671,6 +681,9 @@ export default {
     },
     newsTimeText(item) {
       return item?.publishedAt || item?.published_at || this.newsGeneratedAtText || '刚刚更新'
+    },
+    openNews(item) {
+      this.selectedNewsItem = item
     },
     formatTimestamp(value) {
       if (!value) return ''

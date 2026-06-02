@@ -51,3 +51,7 @@ Every repository change must update this file. Add one entry to the iteration lo
 | 2 | 2026-05-29 | Improved mobile valuation refresh, overseas valuation data normalization, news filtering display, contribution analysis, and touch scrolling behavior. |
 | 3 | 2026-05-29 | Fixed mobile overseas valuation white screen by exposing template formatters and hardening polling/data normalization. |
 | 4 | 2026-05-29 | Fixed A-share valuation change percentages staying at 0 before NAV refresh by calculating fund change from live quotes. |
+| 5 | 2026-06-01 | Added in-app mobile news viewing, fixed overseas cached close valuation parsing, and polished mobile fund/news card styling. |
+| 6 | 2026-06-02 | Rechecked overseas valuation, corrected US market session detection, and filled missing cached quote symbols before calculation. |
+| 7 | 2026-06-02 | Adjusted ssh-tool deployment operations to redirect remote script output that breaks Windows GBK console encoding. |
+| 8 | 2026-06-02 | Added an optional Maven deploy profile that runs ssh-tool after package when explicitly enabled. |
