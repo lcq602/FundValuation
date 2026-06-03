@@ -40,7 +40,6 @@
 
       <!-- Empty state -->
       <div v-else-if="!content" class="state-content">
-        <div class="state-icon">&#x26A0;</div>
         <p class="state-text">暂未获取到文章内容</p>
         <div class="state-actions">
           <button class="btn-secondary" @click="$emit('close')">返回</button>
@@ -76,7 +75,7 @@ const props = defineProps({
 defineEmits(['close'])
 
 const content = ref('')
-const loading = ref(false)
+const loading = ref(true)
 const error = ref('')
 const articleTitle = ref('')
 const articleSource = ref('')
