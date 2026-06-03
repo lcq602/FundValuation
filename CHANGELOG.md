@@ -68,3 +68,32 @@
 
 **修复**：
 - `FundControllerTest`：限定 `@WebMvcTest(FundController.class)` 避免扫描 Admin 控制器
+
+## 2026-06-03 第4轮 — 手机端资讯内嵌阅读器
+
+**问题**：手机端「资讯」Tab 点击新闻后弹出底部面板（`NewsDetailSheet`），仅展示占位文字和原文 URL，点击「查看原文」跳转外部浏览器（东方财富），用户离开应用。
+
+**方案**：后端 Jsoup 抓取文章正文 + 前端全屏文章阅读页，所有内容在应用内展示。
+
+### 后端改动
+- 新增 Jsoup 1.19.1 依赖（HTML 解析）
+- `NewsContentResponse` DTO：`url`/`title`/`content`/`source`/`fetchedAt`
+- `NewsService.getArticleContent(url)`：
+  - Redis 缓存（key: `news:content:<MD5>`，TTL 24h）
+  - 缓存未命中 → Jsoup 抓取 → 多选择器定位正文 → 清洗（去 script/style/iframe/广告）
+  - 空内容不缓存（避免缓存临时错误）
+  - 使用注入的 `Clock` 保障可测试性
+- `GET /api/news/content?url=` 端点
+- 3 个单元测试：缓存命中 / 抓取失败降级 / 空 URL 校验
+
+### 前端改动
+- 新建 `NewsArticlePage.vue`：全屏固定覆盖层（z-index: 1000）
+  - 4 种状态：骨架屏加载 / 错误+重试 / 空内容 / 正文渲染
+  - 正文支持：p / img / h2-h3 / blockquote / table / ul-ol / hr
+  - 暗色模式兼容
+- `App.vue`：替换 `NewsDetailSheet` → `NewsArticlePage`
+- 删除 `NewsDetailSheet.vue`
+
+### 构建验证
+- 后端：37 测试通过，0 失败
+- 前端：Vite 构建 27 模块，0 错误
