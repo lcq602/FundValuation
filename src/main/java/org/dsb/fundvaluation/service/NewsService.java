@@ -104,11 +104,13 @@ public class NewsService {
         // 2. Cache miss — fetch and parse via Jsoup
         NewsContentResponse response = fetchAndParseArticle(url);
 
-        // 3. Store in Redis with 24h TTL
-        try {
-            redisTemplate.opsForValue().set(cacheKey, objectMapper.writeValueAsString(response), Duration.ofDays(1));
-        } catch (Exception e) {
-            log.warn("Failed to cache article content for {}: {}", url, e.getMessage());
+        // 3. Store in Redis with 24h TTL (skip caching if content is empty — transient error)
+        if (response.getContent() != null && !response.getContent().isBlank()) {
+            try {
+                redisTemplate.opsForValue().set(cacheKey, objectMapper.writeValueAsString(response), Duration.ofDays(1));
+            } catch (Exception e) {
+                log.warn("Failed to cache article content for {}: {}", url, e.getMessage());
+            }
         }
 
         return response;
@@ -261,7 +263,7 @@ public class NewsService {
             response.setTitle(doc.title());
             response.setContent(article != null ? article.html() : "");
             response.setSource(extractSource(doc, url));
-            response.setFetchedAt(System.currentTimeMillis());
+            response.setFetchedAt(clock.instant().toEpochMilli());
             return response;
         } catch (Exception e) {
             log.warn("Failed to fetch article from {}: {}", url, e.getMessage());
@@ -270,7 +272,7 @@ public class NewsService {
             response.setTitle("");
             response.setContent("");
             response.setSource("");
-            response.setFetchedAt(System.currentTimeMillis());
+            response.setFetchedAt(clock.instant().toEpochMilli());
             return response;
         }
     }
