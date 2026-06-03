@@ -1,5 +1,6 @@
 package org.dsb.fundvaluation;
 
+import org.dsb.fundvaluation.dto.NewsContentResponse;
 import org.dsb.fundvaluation.dto.NewsItem;
 import org.dsb.fundvaluation.service.NewsService;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -76,6 +78,53 @@ class NewsServiceTest {
                 .containsExactly("半导体设备国产替代推进");
         verify(redisTemplate.opsForValue()).set(eq("news:roll:eastmoney"), contains("半导体设备国产替代推进"));
         server.verify();
+    }
+
+    @Test
+    void getArticleContent_returnsCachedContent() throws Exception {
+        var cachedJson = """
+                {"url":"https://stock.eastmoney.com/a/202605253748075277.html","title":"Test Article","content":"<p>Hello</p>","source":"东方财富","fetchedAt":1717392000000}
+                """;
+        var redisTemplate = mockRedis(cachedJson);
+
+        var service = new NewsService(new RestTemplate(), redisTemplate, new ObjectMapper(),
+                Clock.fixed(Instant.parse("2026-06-03T10:00:00Z"), ZoneId.of("UTC")));
+
+        var result = service.getArticleContent("https://stock.eastmoney.com/a/202605253748075277.html");
+
+        assertThat(result.getUrl()).isEqualTo("https://stock.eastmoney.com/a/202605253748075277.html");
+        assertThat(result.getTitle()).isEqualTo("Test Article");
+        assertThat(result.getContent()).isEqualTo("<p>Hello</p>");
+        assertThat(result.getSource()).isEqualTo("东方财富");
+        assertThat(result.getFetchedAt()).isEqualTo(1717392000000L);
+    }
+
+    @Test
+    void getArticleContent_returnsEmptyOnFetchFailure() {
+        var redisTemplate = mockRedis(null);
+
+        var service = new NewsService(new RestTemplate(), redisTemplate, new ObjectMapper(),
+                Clock.fixed(Instant.parse("2026-06-03T10:00:00Z"), ZoneId.of("UTC")));
+
+        var result = service.getArticleContent("https://nonexistent.example.com/article.html");
+
+        assertThat(result.getUrl()).isEqualTo("https://nonexistent.example.com/article.html");
+        assertThat(result.getTitle()).isEmpty();
+        assertThat(result.getContent()).isEmpty();
+        assertThat(result.getSource()).isEmpty();
+        assertThat(result.getFetchedAt()).isGreaterThan(0);
+    }
+
+    @Test
+    void getArticleContent_throwsOnBlankUrl() {
+        var redisTemplate = mockRedis(null);
+        var service = new NewsService(new RestTemplate(), redisTemplate, new ObjectMapper(),
+                Clock.fixed(Instant.parse("2026-06-03T10:00:00Z"), ZoneId.of("UTC")));
+
+        assertThatThrownBy(() -> service.getArticleContent(""))
+                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> service.getArticleContent(null))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     private StringRedisTemplate mockRedis(String cachedPayload) {
