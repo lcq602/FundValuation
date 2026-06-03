@@ -388,10 +388,16 @@
       :fallback-time="newsGeneratedAtText"
       @close="showArticleView = false"
     />
+
+    <!-- Exit hint toast -->
+    <div v-if="showExitToast" class="exit-toast">
+      再滑动一次退出应用
+    </div>
   </div>
 </template>
 
 <script>
+import { App as CapacitorApp } from '@capacitor/app'
 import FundList from './components/FundList.vue'
 import FundDetail from './components/FundDetail.vue'
 import HoldingSheet from './components/HoldingSheet.vue'
@@ -455,6 +461,11 @@ export default {
       touchStartY: 0,
       isPulling: false,
       isHorizontalSwipe: false,
+      swipeBackDistance: 0,
+      swipeHandled: false,
+      exitPending: false,
+      exitTimer: null,
+      showExitToast: false,
       isMarketHours: false,
       scrollElement: null,
       isDarkMode: false,
@@ -704,6 +715,53 @@ export default {
     goBack() {
       this.showList = true
     },
+    async smartBack() {
+      // 1. Article view → close
+      if (this.showArticleView && this.articleViewItem) {
+        this.showArticleView = false
+        return
+      }
+      // 2. Overseas fund detail → close
+      if (this.selectedOverseasFund) {
+        this.selectedOverseasFund = null
+        return
+      }
+      // 3. Holding sheet → close
+      if (this.selectedHolding) {
+        this.selectedHolding = null
+        return
+      }
+      // 4. Fund detail → back to list
+      if (!this.showList) {
+        this.showList = true
+        return
+      }
+      // 5. Top level → double-swipe to exit
+      if (this.exitPending) {
+        // Second swipe: exit app
+        if (this.exitTimer) {
+          clearTimeout(this.exitTimer)
+          this.exitTimer = null
+        }
+        this.exitPending = false
+        this.showExitToast = false
+        try {
+          await CapacitorApp.exitApp()
+        } catch {
+          // Fallback for browser/dev environment
+          try { window.close() } catch {}
+        }
+        return
+      }
+      // First swipe: show toast hint
+      this.exitPending = true
+      this.showExitToast = true
+      this.exitTimer = setTimeout(() => {
+        this.exitPending = false
+        this.showExitToast = false
+        this.exitTimer = null
+      }, 2000)
+    },
     startPolling() {
       this.pollTimer = setInterval(async () => {
         try {
@@ -779,35 +837,50 @@ export default {
         this.overseasPollTimer = null
       }
     },
-    // Pull to refresh touch handlers
+    // Touch handlers: swipe back + pull to refresh
     onTouchStart(e) {
       const touch = e.touches[0]
       this.touchStartX = touch.clientX
       this.touchStartY = touch.clientY
       this.pullStartY = touch.clientY
       this.isHorizontalSwipe = false
-      if (this.activeTab !== 'valuation' || !this.showList || this.loading) return
-      const el = this.$refs.scrollArea
-      if (el && el.scrollTop === 0) {
-        this.isPulling = true
+      this.isPulling = false
+      this.swipeBackDistance = 0
+      this.swipeHandled = false
+
+      // Enable pull-to-refresh only on valuation tab list
+      if (this.activeTab === 'valuation' && this.showList && !this.loading) {
+        const el = this.$refs.scrollArea
+        if (el && el.scrollTop === 0) {
+          this.isPulling = true
+        }
       }
     },
     onTouchMove(e) {
       const touch = e.touches[0]
       const deltaX = touch.clientX - this.touchStartX
-      const deltaYFromStart = touch.clientY - this.touchStartY
+      const deltaY = touch.clientY - this.touchStartY
+      const isHorizontal = Math.abs(deltaX) > 14 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2
 
-      if (!this.isHorizontalSwipe && Math.abs(deltaX) > 14 && Math.abs(deltaX) > Math.abs(deltaYFromStart) * 1.2) {
+      if (!this.isHorizontalSwipe && isHorizontal) {
         this.isHorizontalSwipe = true
       }
 
       if (this.isHorizontalSwipe) {
         e.preventDefault()
+        this.swipeBackDistance = Math.abs(deltaX)
+
+        // Trigger back when swiped past 30% of screen width (one shot)
+        const threshold = window.innerWidth * 0.3
+        if (this.swipeBackDistance >= threshold && !this.swipeHandled) {
+          this.swipeHandled = true
+          this.smartBack()
+        }
         return
       }
 
+      // Vertical pull-to-refresh
       if (!this.isPulling) return
-      const deltaY = touch.clientY - this.pullStartY
       if (deltaY > 0) {
         e.preventDefault()
         this.pullDistance = Math.min(deltaY * 0.5, 100)
@@ -824,6 +897,8 @@ export default {
       this.touchStartX = 0
       this.touchStartY = 0
       this.isHorizontalSwipe = false
+      this.swipeBackDistance = 0
+      // swipeHandled resets on next touchStart
     },
   },
 }

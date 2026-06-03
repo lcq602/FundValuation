@@ -1950,3 +1950,38 @@ body {
 .contrib-item.fall .contrib-value {
   color: var(--fall);
 }
+
+/* ==================== Swipe Back Exit Toast ==================== */
+.exit-toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 14px;
+  z-index: 2100;
+  white-space: nowrap;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: toast-fadein 0.25s ease-out;
+}
+
+.dark .exit-toast {
+  background: rgba(30, 30, 46, 0.85);
+  color: #e0e0e0;
+}
+
+@keyframes toast-fadein {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
