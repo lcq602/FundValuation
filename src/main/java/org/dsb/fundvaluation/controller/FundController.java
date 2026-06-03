@@ -2,6 +2,7 @@ package org.dsb.fundvaluation.controller;
 
 import org.dsb.fundvaluation.dto.EstimateResponse;
 import org.dsb.fundvaluation.dto.FundsResponse;
+import org.dsb.fundvaluation.dto.NewsContentResponse;
 import org.dsb.fundvaluation.dto.NewsResponse;
 import org.dsb.fundvaluation.dto.SnapshotResponse;
 import org.dsb.fundvaluation.service.NewsService;
@@ -44,6 +45,11 @@ public class FundController {
             @RequestParam(value = "query", required = false) String query,
             @RequestParam(value = "limit", defaultValue = "12") int limit) {
         return newsService.search(query, limit);
+    }
+
+    @GetMapping("/news/content")
+    public NewsContentResponse getNewsContent(@RequestParam("url") String url) {
+        return newsService.getArticleContent(url);
     }
 
     @GetMapping("/estimate")
