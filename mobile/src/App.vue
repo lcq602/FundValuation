@@ -382,11 +382,11 @@
       @close="selectedHolding = null"
     />
 
-    <NewsDetailSheet
-      v-if="selectedNewsItem"
-      :item="selectedNewsItem"
+    <NewsArticlePage
+      v-if="showArticleView && articleViewItem"
+      :item="articleViewItem"
       :fallback-time="newsGeneratedAtText"
-      @close="selectedNewsItem = null"
+      @close="showArticleView = false"
     />
   </div>
 </template>
@@ -396,7 +396,7 @@ import FundList from './components/FundList.vue'
 import FundDetail from './components/FundDetail.vue'
 import HoldingSheet from './components/HoldingSheet.vue'
 import OverseasFundDetail from './components/OverseasFundDetail.vue'
-import NewsDetailSheet from './components/NewsDetailSheet.vue'
+import NewsArticlePage from './components/NewsArticlePage.vue'
 import { NEWS_API, SNAPSHOT_API, OVERSEAS_API, OVERSEAS_TIME_PERIOD_API, readJsonResponse } from './utils/api.js'
 import { normalizeSnapshot } from './utils/snapshot.js'
 import { normalizeOverseasFunds, normalizeTimePeriod } from './utils/overseas.js'
@@ -409,7 +409,7 @@ const FAVORITES_KEY = 'fund_favorites'
 const DARK_MODE_KEY = 'fund_dark_mode'
 
 export default {
-  components: { FundList, FundDetail, HoldingSheet, OverseasFundDetail, NewsDetailSheet },
+  components: { FundList, FundDetail, HoldingSheet, OverseasFundDetail, NewsArticlePage },
   data() {
     return {
       showIntro: true,
@@ -432,7 +432,8 @@ export default {
       newsError: '',
       newsPollTimer: null,
       newsRequestInFlight: false,
-      selectedNewsItem: null,
+      articleViewItem: null,
+      showArticleView: false,
       // Overseas funds
       overseasFunds: [],
       overseasLoading: false,
@@ -683,7 +684,8 @@ export default {
       return item?.publishedAt || item?.published_at || this.newsGeneratedAtText || '刚刚更新'
     },
     openNews(item) {
-      this.selectedNewsItem = item
+      this.articleViewItem = item
+      this.showArticleView = true
     },
     formatTimestamp(value) {
       if (!value) return ''
