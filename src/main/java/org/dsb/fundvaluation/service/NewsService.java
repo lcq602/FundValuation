@@ -17,11 +17,20 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.springframework.util.DigestUtils;
+import java.nio.charset.StandardCharsets;
+
+import org.dsb.fundvaluation.dto.NewsContentResponse;
 
 @Service
 public class NewsService {
@@ -72,6 +81,37 @@ public class NewsService {
     @Scheduled(fixedDelayString = "${news.refresh.interval-ms:3600000}", initialDelayString = "${news.refresh.initial-delay-ms:5000}")
     public void scheduledRefresh() {
         refreshCache();
+    }
+
+    public NewsContentResponse getArticleContent(String url) {
+        if (url == null || url.isBlank()) {
+            throw new IllegalArgumentException("URL must not be blank");
+        }
+
+        String cacheKey = "news:content:" + DigestUtils.md5DigestAsHex(url.getBytes(StandardCharsets.UTF_8));
+
+        // 1. Try Redis cache
+        try {
+            String cached = redisTemplate.opsForValue().get(cacheKey);
+            if (cached != null && !cached.isBlank()) {
+                log.debug("Article content cache hit for URL: {}", url);
+                return objectMapper.readValue(cached, NewsContentResponse.class);
+            }
+        } catch (Exception e) {
+            log.warn("Failed to read article content cache for {}: {}", url, e.getMessage());
+        }
+
+        // 2. Cache miss — fetch and parse via Jsoup
+        NewsContentResponse response = fetchAndParseArticle(url);
+
+        // 3. Store in Redis with 24h TTL
+        try {
+            redisTemplate.opsForValue().set(cacheKey, objectMapper.writeValueAsString(response), Duration.ofDays(1));
+        } catch (Exception e) {
+            log.warn("Failed to cache article content for {}: {}", url, e.getMessage());
+        }
+
+        return response;
     }
 
     CachedNews refreshCache() {
@@ -199,6 +239,74 @@ public class NewsService {
         if (url.contains("//futures.")) return "期货";
         if (url.contains("//fund.")) return "基金";
         if (url.contains("//hk.")) return "港美";
+        return "资讯";
+    }
+
+    private NewsContentResponse fetchAndParseArticle(String url) {
+        try {
+            Document doc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0")
+                    .timeout(8000)
+                    .get();
+
+            Element article = selectArticleBody(doc);
+
+            if (article != null) {
+                article.select("script, style, iframe, noscript, .ad, .advertisement, .gg-box, .gg_group, .banner, .recommend, .share, .footer").remove();
+                article.select("[class*=ad], [class*=gg_], [id*=ad], [id*=gg_]").remove();
+            }
+
+            NewsContentResponse response = new NewsContentResponse();
+            response.setUrl(url);
+            response.setTitle(doc.title());
+            response.setContent(article != null ? article.html() : "");
+            response.setSource(extractSource(doc, url));
+            response.setFetchedAt(System.currentTimeMillis());
+            return response;
+        } catch (Exception e) {
+            log.warn("Failed to fetch article from {}: {}", url, e.getMessage());
+            NewsContentResponse response = new NewsContentResponse();
+            response.setUrl(url);
+            response.setTitle("");
+            response.setContent("");
+            response.setSource("");
+            response.setFetchedAt(System.currentTimeMillis());
+            return response;
+        }
+    }
+
+    private Element selectArticleBody(Document doc) {
+        String[] selectors = {
+                ".article-body", ".news-content", ".detail-content", "#content",
+                ".Body", ".main-content", "article", ".article-content",
+                ".detail-body", ".news-body", ".art-body"
+        };
+
+        for (String selector : selectors) {
+            Element element = doc.selectFirst(selector);
+            if (element != null) {
+                return element;
+            }
+        }
+
+        return doc.body();
+    }
+
+    private String extractSource(Document doc, String url) {
+        Element sourceEl = doc.selectFirst(".source, .data-source, .article-source, .info-source");
+        if (sourceEl != null) {
+            String text = sourceEl.text().trim();
+            if (!text.isEmpty()) {
+                return text;
+            }
+        }
+        // Infer from URL
+        if (url.contains("finance.eastmoney.com") || url.contains("stock.eastmoney.com")) {
+            return "东方财富";
+        }
+        if (url.contains("sina.com.cn")) {
+            return "新浪财经";
+        }
         return "资讯";
     }
 
